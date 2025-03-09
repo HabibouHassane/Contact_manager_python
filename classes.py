@@ -1,3 +1,5 @@
+import os
+
 class Contact:
     #constructeur
     def __init__(self,nom,prenom, email,telephone):
@@ -56,8 +58,11 @@ class GestionnaireContact:
 
 
         def afficher_contact(self):
-            for cont in self.liste_contact:
-                print (f"Nom : {cont.get_nom()} Prénom : {cont.get_prenom()} Téléphone : {cont.get_telephone()} Mail : {cont.get_email()}") 
+            if(len(self.liste_contact) != 0):
+                for cont in self.liste_contact:
+                    print (f"Nom : {cont.get_nom()} Prénom : {cont.get_prenom()} Téléphone : {cont.get_telephone()} Mail : {cont.get_email()}") 
+            else:
+                print("la liste des contact est vide")
 
         #fonction qui recherche un contact par son nom
         def rechercher_contact(self,nom):
@@ -71,6 +76,34 @@ class GestionnaireContact:
             for i, cont in range (self.liste_contact):
                 if telephone == cont.get_telephone():
                     del self.liste_contact[i]
+
+
+        #fonction qui sauvegarde les contacts dans un fichier texte
+
+        def sauvegarder_contacts(self):
+            with open("liste_contact.txt", "a", encoding="utf-8") as fichier :
+                for contact in self.liste_contact:
+                    fichier.write(f"{contact.get_nom()};{contact.get_prenom()};{contact.get_telephone()};{contact.get_email()}\n") 
+
+        
+        #fonction qui permet de charger les contacts à partir du fichier liste_contact
+
+        def charger_contacts(self):
+            try:
+                with open("liste_contact.txt","r",encoding="utf-8") as fichier:
+                    for contact in fichier :
+                        nom, prenom, telephone, email = contact.strip().split(";")
+                        contact = Contact(nom, prenom, email, telephone)
+                        self.ajouter_contact(contact)
+            except FileNotFoundError:
+                print("Le fichier de liste de contact n'existe pas encore")
+
+
+
+                
+
+            
+
 
     
 
